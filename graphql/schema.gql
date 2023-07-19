@@ -1,0 +1,21 @@
+type Query {
+  availableProperties: [Property!]! 
+  contacts: [Contact]
+}
+
+type Contact {
+  name: String!
+}
+
+type Property {
+  description: String!
+  address: Address!
+  available: Boolean
+}
+
+type Address{
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+}
