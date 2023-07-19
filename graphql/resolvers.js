@@ -1,20 +1,22 @@
-import { searchContactsCRM } from '../graphqlSalesforce.js';
+import { searchLeadsCRM } from '../graphqlSalesforce.js';
 import dotenv from 'dotenv';
 dotenv.config();
-
 
 
 const URL = process.env.URL;
 const TOKEN = process.env.TOKEN;
 const query = {
   query: `
-  query contacts {
+  query leads {
     uiapi {
       query {
-        Contact {
+        Lead (first:5){
           edges {
             node {
               Name {
+                value
+              }
+              Email {
                 value
               }
             }
@@ -24,16 +26,6 @@ const query = {
     }
   }`,
 }
-
-
-
-async function getContacts(){
-  const data = await searchContactsCRM(URL, TOKEN, query);
-  console.log("🚀 ~ file: resolvers.js:27 ~ getContacts ~ data:", data)
-  return data.uiapi.query.Contact.edges.map(edge => edge.node.Name.value);
-}
-
-
 
 const properties = [
   {
@@ -48,13 +40,27 @@ const properties = [
   }
 ]
 
+
+
+
+async function getLeads() {
+  const LeadsResponse = await searchLeadsCRM(URL, TOKEN, query);
+  const Leads = LeadsResponse.map((contact) => {
+    return {
+      name: contact.Name.value,
+      email: contact.Email.value
+    }
+  })
+  return Leads;
+}
+
 export const resolvers = {
   Query: {
     availableProperties: async (_, args) => {
       return properties.filter(property => property.available)
     },
-    contacts: async () => {
-      return getContacts();
+    leads: async () => {
+      return getLeads();
     }
   }
 }

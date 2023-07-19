@@ -17,5 +17,13 @@
     "fastify": "^4.20.0",
     "graphql": "^16.7.1",
     "mercurius": "^13.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^9.1.3",
+    "babel-preset-es2015": "^6.24.1",
+    "force-server": "^0.0.8",
+    "forcejs": "^2.2.1",
+    "webpack": "^5.88.2"
   }
 }

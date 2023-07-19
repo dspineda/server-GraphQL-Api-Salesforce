@@ -1,10 +1,11 @@
 type Query {
   availableProperties: [Property!]! 
-  contacts: [Contact]
+  leads: [Lead!]!
 }
 
-type Contact {
+type Lead {
   name: String!
+  email: String!
 }
 
 type Property {
