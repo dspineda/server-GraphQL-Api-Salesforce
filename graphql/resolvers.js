@@ -1,9 +1,10 @@
-import { searchLeadsCRM } from '../graphqlSalesforce.js';
+import { searchLeadsCRM, createLeadInCRM } from '../graphqlSalesforce.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
 
-const URL = process.env.URL;
+const URLGRAPHQL = process.env.URLGRAPHQL;
+const URLREST = process.env.URLREST;
 const TOKEN = process.env.TOKEN;
 const query = {
   query: `
@@ -13,6 +14,7 @@ const query = {
         Lead (first:5){
           edges {
             node {
+              Id
               Name {
                 value
               }
@@ -44,15 +46,34 @@ const properties = [
 
 
 async function getLeads() {
-  const LeadsResponse = await searchLeadsCRM(URL, TOKEN, query);
-  const Leads = LeadsResponse.map((contact) => {
+  const LeadsResponse = await searchLeadsCRM(URLGRAPHQL, TOKEN, query);
+  const Leads = LeadsResponse.map((ld) => {
     return {
-      name: contact.Name.value,
-      email: contact.Email.value
+      id: ld.Id,
+      name: ld.Name.value,
+      email: ld.Email.value
     }
   })
   return Leads;
 }
+
+async function createLead(name, email) {
+  
+  const body = {
+    firstName: name,
+    lastName: name,
+    email: email
+  };
+  const LeadResponse = await createLeadInCRM(URLREST, TOKEN, body);
+  const Lead = {
+    id: LeadResponse.id,
+    name: name,
+    email: email
+  }
+  console.log("🚀 ~ file: resolvers.js:72 ~ createLead ~ Lead:", Lead)
+  return Lead;
+}
+
 
 export const resolvers = {
   Query: {
@@ -62,8 +83,17 @@ export const resolvers = {
     leads: async () => {
       return getLeads();
     }
+  },
+
+  Mutation: {
+    createLead: async (_, args) => {
+      const { name, email } = args;
+      return createLead(name, email);
+    }
   }
 }
+
+
 
 
 

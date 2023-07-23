@@ -21,3 +21,27 @@ export async function searchLeadsCRM(url, token, query){
     throw error;
   }
 }
+
+export async function createLeadInCRM(url, token, body){
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': `application/json`,
+        'Authorization': `Bearer ${token}`
+      },
+      body: `${JSON.stringify(body)}`
+    })
+    console.log("🎃 ~ file: graphqlSalesforce.js:80 ~ createLeadInCRM ~ response", response)
+      if(!response.ok){
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+    throw error;
+  }
+
+}
