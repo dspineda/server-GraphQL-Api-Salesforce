@@ -4,12 +4,13 @@ type Query {
 }
 
 type Mutation {
- createLead(name: String!, email: String!): Lead!
+ createLead(firstName: String!, lastName: String!, email: String!): Lead!
 }
 
 type Lead {
   id: ID!
-  name: String!
+  firstName: String!
+  lastName: String!
   email: String!
 }
 

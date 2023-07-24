@@ -15,7 +15,10 @@ const query = {
           edges {
             node {
               Id
-              Name {
+              FirstName {
+                value
+              }
+              LastName {
                 value
               }
               Email {
@@ -43,34 +46,35 @@ const properties = [
 ]
 
 
-
-
 async function getLeads() {
   const LeadsResponse = await searchLeadsCRM(URLGRAPHQL, TOKEN, query);
+  console.log("🚀 ~ file: resolvers.js:48 ~ getLeads ~ LeadsResponse:", LeadsResponse)
   const Leads = LeadsResponse.map((ld) => {
     return {
       id: ld.Id,
-      name: ld.Name.value,
+      firstName: ld.FirstName.value,
+      lastName: ld.LastName.value,
       email: ld.Email.value
     }
   })
+  console.log("🚀 ~ file: resolvers.js:56 ~ Leads ~ Leads:", Leads)
   return Leads;
 }
 
-async function createLead(name, email) {
+async function createLead(firstName, lastName, email) {
   
   const body = {
-    firstName: name,
-    lastName: name,
+    firstName: firstName,
+    lastName: lastName,
     email: email
   };
   const LeadResponse = await createLeadInCRM(URLREST, TOKEN, body);
   const Lead = {
     id: LeadResponse.id,
-    name: name,
+    firstName: firstName,
+    lastName: lastName,
     email: email
   }
-  console.log("🚀 ~ file: resolvers.js:72 ~ createLead ~ Lead:", Lead)
   return Lead;
 }
 
@@ -87,8 +91,8 @@ export const resolvers = {
 
   Mutation: {
     createLead: async (_, args) => {
-      const { name, email } = args;
-      return createLead(name, email);
+      const { firstName, lastName, email } = args;
+      return createLead(firstName, lastName, email);
     }
   }
 }
