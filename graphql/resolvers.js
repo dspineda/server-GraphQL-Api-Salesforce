@@ -48,7 +48,6 @@ const properties = [
 
 async function getLeads() {
   const LeadsResponse = await searchLeadsCRM(URLGRAPHQL, TOKEN, query);
-  console.log("🚀 ~ file: resolvers.js:48 ~ getLeads ~ LeadsResponse:", LeadsResponse)
   const Leads = LeadsResponse.map((ld) => {
     return {
       id: ld.Id,
@@ -57,7 +56,6 @@ async function getLeads() {
       email: ld.Email.value
     }
   })
-  console.log("🚀 ~ file: resolvers.js:56 ~ Leads ~ Leads:", Leads)
   return Leads;
 }
 

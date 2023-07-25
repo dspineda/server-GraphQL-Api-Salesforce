@@ -32,7 +32,6 @@ export async function createLeadInCRM(url, token, body){
       },
       body: `${JSON.stringify(body)}`
     })
-    console.log("🎃 ~ file: graphqlSalesforce.js:80 ~ createLeadInCRM ~ response", response)
       if(!response.ok){
         throw new Error('Network response was not ok');
       }
